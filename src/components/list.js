@@ -16,11 +16,27 @@ const List = () => {
     const [images, setImages] = useState({});
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(0);
-    const [pageTitle, setPageTitle] = useState("All Dogs");
+    const [pageTitle, setPageTitle] = useState("All dogs");
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState({breeds});
 
     const pageLimit = null;
+
+
+    // Get Images
+    const getImage = (breed_id) => {
+        return axios.get(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
+            params: {
+                limit: 1,
+                breed_id: breed_id
+            }
+        }).then(response => {
+            return response.data
+        });
+    }
+
+
+
 
 
      useEffect(() => {
@@ -85,23 +101,37 @@ const List = () => {
         return (
         Array.from(filteredResults)
             .map(breed => {
-                const image = images
-                    .filter(image => image.breeds.length > 0)
-                    .filter(image => image.breeds[0].id === breed.id)
-                    .map(image => {
-                        return (
-                            image.length > 0 ? (
-                                image[0].url
-                            ) : (
-                                image.url
-                            )
-                        )
-                    });
+                // const image = images
+                //     .filter(image => image.breeds.length > 0)
+                //     .filter(image => image.breeds[0].id === breed.id)
+                //     .map(image => {
+                //         return (
+                //             image.length > 0 ? (
+                //                 image[0].url
+                //             ) : (
+                //                 image.url
+                //             )
+                //         )
+                //     });
+
+                (async function(result){
+                    result = await getImage(breed.id)
+                    if (result.length > 0) {
+                        console.log(result[0].url)
+                    }
+                })()
+
+                // const imageUrl = getImage(breed.id).then(data => {
+                //     if (data.length > 0) {
+                //         return data[0].url;
+                //     }
+                // });
+
                 return (
                     <ListItem
                         key={breed.id}
                         name={breed.name}
-                        image={image}
+                        image={''}
                     />
                 )
             })
