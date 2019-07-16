@@ -35,6 +35,24 @@ const List = () => {
         });
     }
 
+    const getImages2 = async (breed_id) =>{
+        const promises = breeds.map(async repo => {
+            // request details from GitHub’s API with Axios
+            const response = await axios.get(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
+                params: {
+                    limit: 1,
+                    breed_id: breed_id
+                }
+            });
+
+            return {
+                name: response.data.url,
+            }
+        })
+
+        const results = await Promise.all(promises)
+    }
+
 
 
 
@@ -98,40 +116,33 @@ const List = () => {
     console.log('query', query)
 
     const List = () => {
-        return (
-        Array.from(filteredResults)
-            .map(breed => {
-                // const image = images
-                //     .filter(image => image.breeds.length > 0)
-                //     .filter(image => image.breeds[0].id === breed.id)
-                //     .map(image => {
-                //         return (
-                //             image.length > 0 ? (
-                //                 image[0].url
-                //             ) : (
-                //                 image.url
-                //             )
-                //         )
-                //     });
+        const [image, setImage] = useState('');
 
-                (async function(result){
-                    result = await getImage(breed.id)
-                    if (result.length > 0) {
-                        console.log(result[0].url)
+        useEffect(() => {
+            const callAPI = async (breed_id) => {
+                return fetch(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
+                    params: {
+                        limit: 1,
+                        breed_id: breed_id
                     }
-                })()
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        setImage(data[0].url)
+                    })
+            }
+            callAPI();
 
-                // const imageUrl = getImage(breed.id).then(data => {
-                //     if (data.length > 0) {
-                //         return data[0].url;
-                //     }
-                // });
+        }, []);
 
+        return (
+        filteredResults
+            .map(breed => {
                 return (
                     <ListItem
                         key={breed.id}
-                        name={breed.name}
-                        image={''}
+                        breed={breed}
+                        image={image}
                     />
                 )
             })

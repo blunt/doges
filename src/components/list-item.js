@@ -8,11 +8,11 @@ const ListItem = (props) => {
                     <img
                         className={"h-64 w-full object-cover"}
                         src={props.image}
-                        alt={"Picture of a " + props.name}
+                        alt={"Picture of a " + props.breed.name}
                     />
                 }
             </div>
-            <h3 className={"font-bold"}>{props.name}</h3>
+            <h3 className={"font-bold"}>{props.breed.name}</h3>
         </li>
     );
 }
