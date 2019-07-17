@@ -4,10 +4,10 @@ const ListItem = (props) => {
     return (
         <li className={"w-1/4 px-4 mb-8"}>
             <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200"}>
-                { props.image !== "" &&
+                { props.breed.image !== "" &&
                     <img
                         className={"h-64 w-full object-cover"}
-                        src={props.image}
+                        src={props.breed.image}
                         alt={"Picture of a " + props.breed.name}
                     />
                 }

@@ -12,24 +12,23 @@ const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
 const List = () => {
 
     const [loading, setLoading] = useState(true);
-    const [breeds, setBreeds] = useState({});
+    const [breeds, setBreeds] = useState([]);
     const [error, setError] = useState(null);
     const [pageTitle, setPageTitle] = useState("All dogs");
     const [query, setQuery] = useState("");
-    const [filteredResults, setFilteredResults] = useState({breeds});
+    const [filteredResults, setFilteredResults] = useState([]);
 
-    let dogs = []
 
-    async function asyncForEach(array, callback) {
-        for (let index = 0; index < array.length; index++) {
-            await callback(array[index], index, array);
-        }
-    }
+    let dogs = [];
+
 
     useEffect(() => {
         const callAPI = async () => {
             try {
-                // Get Breeds
+
+                /*
+                    Get dog breeds from API
+                */
                 const results = await axios.get(proxyUrl + apiUrl, {
                     params: {
                         limit: 10,
@@ -37,10 +36,12 @@ const List = () => {
                     }
                 });
 
-                // Get Images
+                /*
+                    Get dog images based on breed_id
+                */
                 const start = async (breed_id) => {
-
                     try {
+
                         const images = await axios.get(proxyUrl + apiImageUrl, {
                             params: {
                                 limit: null,
@@ -49,45 +50,54 @@ const List = () => {
                             }
                         });
 
+                        setLoading(false);
                         return images;
 
                     } catch (error) {
+
+                        setLoading(false);
                         setError(error);
+
                     }
                 }
 
-                results.data.forEach(function (result) {
-                    const dog = Object.create(null);
+                /*
+                    For every dog breed returned from API create dog object and push to dogs array
+                */
+                results.data.map((result) => {
 
-                    start(result.id).then(function (images) {
+                    start(result.id).then((images) => {
+                        const dog = Object.create(null);
                         if (images.data.length > 0) {
                             dog.image = images.data[0].url
+                        } else {
+                            dog.image = ""
                         }
+                        dog.name = result.name
+                        dog.id = result.id
+                        dogs.push(dog);
                     });
-
-                    dog.name = result.name
-                    dog.id = result.id
-                    dogs.push(dog);
 
                 });
 
                 setLoading(false);
-                return results;
+
             } catch (error) {
+
                 setError(error);
+                setLoading(false);
+
             }
         }
-        callAPI();
+        callAPI().then(() => {
+            setBreeds(dogs);
+            setFilteredResults(dogs);
+        });
+
     },[]);
 
     useEffect(() => {
-        setBreeds(dogs);
-    },[]);
-
-
-    useEffect(() => {
-
-        if (query != "") {
+        if (query !== "") {
             setFilteredResults(
                 breeds.filter(breed =>
                     breed.name.toLowerCase().includes(query.toLowerCase())
@@ -96,8 +106,7 @@ const List = () => {
         } else {
             setFilteredResults(breeds);
         }
-
-    }, [breeds, query]);
+    }, [query]);
 
     useEffect(() => {
         if (query !== "") {
@@ -110,16 +119,15 @@ const List = () => {
 
     const List = () => {
         return (
-        filteredResults
-            .map(breed => {
-                return (
-                    <ListItem
-                        key={breed.id}
-                        breed={breed}
-                        image={breed.image}
-                    />
-                )
-            })
+            filteredResults
+                .map(breed => {
+                    return (
+                        <ListItem
+                            key={breed.id}
+                            breed={breed}
+                        />
+                    )
+                })
         )
     }
 
