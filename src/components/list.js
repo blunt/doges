@@ -22,78 +22,77 @@ const List = () => {
     let dogs = [];
 
 
-    useEffect(() => {
-        const callAPI = async () => {
-            try {
+    const callAPI = async () => {
+        try {
 
-                /*
-                    Get dog breeds from API
-                */
-                const results = await axios.get(proxyUrl + apiUrl, {
-                    params: {
-                        limit: 10,
-                        apiKey: apiKey,
-                    }
-                });
-
-                /*
-                    Get dog images based on breed_id
-                */
-                const start = async (breed_id) => {
-                    try {
-
-                        const images = await axios.get(proxyUrl + apiImageUrl, {
-                            params: {
-                                limit: null,
-                                apiKey: apiKey,
-                                breed_id: breed_id,
-                            }
-                        });
-
-                        setLoading(false);
-                        return images;
-
-                    } catch (error) {
-
-                        setLoading(false);
-                        setError(error);
-
-                    }
+            /*
+                Get dog breeds from API
+            */
+            const results = await axios.get(proxyUrl + apiUrl, {
+                params: {
+                    limit: 10,
+                    apiKey: apiKey,
                 }
+            });
 
-                /*
-                    For every dog breed returned from API create dog object and push to dogs array
-                */
-                results.data.map((result) => {
+            /*
+                Get dog images based on breed_id
+            */
+            const start = async (breed_id) => {
+                try {
 
-                    start(result.id).then((images) => {
-                        const dog = Object.create(null);
-                        if (images.data.length > 0) {
-                            dog.image = images.data[0].url
-                        } else {
-                            dog.image = ""
+                    const images = await axios.get(proxyUrl + apiImageUrl, {
+                        params: {
+                            limit: null,
+                            apiKey: apiKey,
+                            breed_id: breed_id,
                         }
-                        dog.name = result.name
-                        dog.id = result.id
-                        dogs.push(dog);
                     });
 
+                    return images;
+
+                } catch (error) {
+
+                    setLoading(false);
+                    setError(error);
+
+                }
+            }
+
+            /*
+                For every dog breed returned from API create dog object and push to dogs array
+            */
+            results.data.map((result) => {
+
+                start(result.id).then((images) => {
+                    const dog = Object.create(null);
+                    if (images.data.length > 0) {
+                        dog.image = images.data[0].url
+                    } else {
+                        dog.image = ""
+                    }
+                    dog.name = result.name
+                    dog.id = result.id
+                    dogs.push(dog);
                 });
 
-                setLoading(false);
+            });
 
-            } catch (error) {
+            setLoading(false);
 
-                setError(error);
-                setLoading(false);
+        } catch (error) {
 
-            }
+            setError(error);
+            setLoading(false);
+
         }
-        callAPI().then(() => {
-            setBreeds(dogs);
-            setFilteredResults(dogs);
-        });
+    }
 
+    callAPI();
+
+    useEffect(() => {
+        setBreeds(dogs);
+        setFilteredResults(dogs);
     },[]);
 
     useEffect(() => {
