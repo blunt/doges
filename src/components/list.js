@@ -26,54 +26,59 @@ const List = () => {
         }
     }
 
-    const callAPI = async () => {
-        try {
-            // Get Breeds
-            const results = await axios.get(proxyUrl + apiUrl, {
-                params: {
-                    limit: null,
-                    apiKey: apiKey,
-                }
-            });
-
-
-            results.data.forEach(function(result) {
-                const dog = Object.create(null);
-                dog.name = result.name
-                dog.id = result.id
-                dogs.push(dog);
-            });
-
-
+    useEffect(() => {
+        const callAPI = async () => {
             try {
+                // Get Breeds
+                const results = await axios.get(proxyUrl + apiUrl, {
+                    params: {
+                        limit: 10,
+                        apiKey: apiKey,
+                    }
+                });
+
                 // Get Images
-                const start = async () => {
-                    await asyncForEach(dogs, async (dog) => {
-                        const image = await axios.get(proxyUrl + apiImageUrl, {
+                const start = async (breed_id) => {
+
+                    try {
+                        const images = await axios.get(proxyUrl + apiImageUrl, {
                             params: {
-                                limit: 1,
+                                limit: null,
                                 apiKey: apiKey,
-                                breed_id: dog.id,
+                                breed_id: breed_id,
                             }
                         });
-                        if (image.data.length > 0) {
-                            dog.image = image.data[0].url
-                        }
-                        return image;
-                    });
+
+                        return images;
+
+                    } catch (error) {
+                        setError(error);
+                    }
                 }
-                start();
+
+                results.data.forEach(function (result) {
+                    const dog = Object.create(null);
+
+                    start(result.id).then(function (images) {
+                        if (images.data.length > 0) {
+                            dog.image = images.data[0].url
+                        }
+                    });
+
+                    dog.name = result.name
+                    dog.id = result.id
+                    dogs.push(dog);
+
+                });
+
+                setLoading(false);
+                return results;
             } catch (error) {
                 setError(error);
             }
-            setLoading(false);
-            return results;
-        } catch (error) {
-            setError(error);
         }
-    }
-
-    callAPI();
+        callAPI();
+    },[]);
 
     useEffect(() => {
         setBreeds(dogs);
@@ -91,6 +96,7 @@ const List = () => {
         } else {
             setFilteredResults(breeds);
         }
+
     }, [breeds, query]);
 
     useEffect(() => {
