@@ -13,83 +13,75 @@ const List = () => {
 
     const [loading, setLoading] = useState(true);
     const [breeds, setBreeds] = useState({});
-    const [images, setImages] = useState({});
     const [error, setError] = useState(null);
-    const [currentPage, setCurrentPage] = useState(0);
     const [pageTitle, setPageTitle] = useState("All dogs");
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState({breeds});
 
-    const pageLimit = null;
+    let dogs = []
 
-
-    // Get Images
-    const getImage = (breed_id) => {
-        return axios.get(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
-            params: {
-                limit: 1,
-                breed_id: breed_id
-            }
-        }).then(response => {
-            return response.data
-        });
+    async function asyncForEach(array, callback) {
+        for (let index = 0; index < array.length; index++) {
+            await callback(array[index], index, array);
+        }
     }
 
-    const getImages2 = async (breed_id) =>{
-        const promises = breeds.map(async repo => {
-            // request details from GitHub’s API with Axios
-            const response = await axios.get(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
+    const callAPI = async () => {
+        try {
+            // Get Breeds
+            const results = await axios.get(proxyUrl + apiUrl, {
                 params: {
-                    limit: 1,
-                    breed_id: breed_id
+                    limit: null,
+                    apiKey: apiKey,
                 }
             });
 
-            return {
-                name: response.data.url,
-            }
-        })
 
-        const results = await Promise.all(promises)
-    }
-
-
+            results.data.forEach(function(result) {
+                const dog = Object.create(null);
+                dog.name = result.name
+                dog.id = result.id
+                dogs.push(dog);
+            });
 
 
-
-     useEffect(() => {
-        const callAPI = async () => {
             try {
-                // Get Breeds
-                const results = await axios.get(proxyUrl + apiUrl + '?api_key=' + apiKey, {
-                    params: {
-                        limit: null,
-                        page: currentPage
-                    }
-                })
-                setBreeds(results.data);
-                console.log('results', results)
-
                 // Get Images
-                const images = await axios.get(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
-                    params: {
-                        limit: 100,
-                        order: 'ASC'
-                    }
-                })
-                setImages(images.data);
-                console.log('images', images)
-                setLoading(false);
+                const start = async () => {
+                    await asyncForEach(dogs, async (dog) => {
+                        const image = await axios.get(proxyUrl + apiImageUrl, {
+                            params: {
+                                limit: 1,
+                                apiKey: apiKey,
+                                breed_id: dog.id,
+                            }
+                        });
+                        if (image.data.length > 0) {
+                            dog.image = image.data[0].url
+                        }
+                        return image;
+                    });
+                }
+                start();
             } catch (error) {
                 setError(error);
-                setLoading(false);
             }
+            setLoading(false);
+            return results;
+        } catch (error) {
+            setError(error);
         }
-        callAPI();
-    }, []);
+    }
+
+    callAPI();
+
+    useEffect(() => {
+        setBreeds(dogs);
+    },[]);
 
 
     useEffect(() => {
+
         if (query != "") {
             setFilteredResults(
                 breeds.filter(breed =>
@@ -102,7 +94,7 @@ const List = () => {
     }, [breeds, query]);
 
     useEffect(() => {
-        if (query != "") {
+        if (query !== "") {
             setPageTitle(filteredResults.length + ' dogs')
         } else {
             setPageTitle('All dogs')
@@ -110,31 +102,7 @@ const List = () => {
     }, [filteredResults]);
 
 
-    console.log('current page', currentPage)
-    // console.log('filteredResults', filteredResults.length)
-    console.log('breeds', breeds)
-    console.log('query', query)
-
     const List = () => {
-        const [image, setImage] = useState('');
-
-        useEffect(() => {
-            const callAPI = async (breed_id) => {
-                return fetch(proxyUrl + apiImageUrl + '?api_key=' + apiKey, {
-                    params: {
-                        limit: 1,
-                        breed_id: breed_id
-                    }
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        setImage(data[0].url)
-                    })
-            }
-            callAPI();
-
-        }, []);
-
         return (
         filteredResults
             .map(breed => {
@@ -142,13 +110,12 @@ const List = () => {
                     <ListItem
                         key={breed.id}
                         breed={breed}
-                        image={image}
+                        image={breed.image}
                     />
                 )
             })
         )
     }
-
 
     return (
         <div className={"w-4/5 relative"}>
