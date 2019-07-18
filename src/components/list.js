@@ -4,12 +4,13 @@ import ListItem from "./list-item";
 import Loader from "./loader";
 import Search from "./search";
 
-const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-      apiUrl = 'https://api.thedogapi.com/v1/breeds',
-      apiImageUrl = 'https://api.thedogapi.com/v1/images/search',
-      apiKey = 'dda2eda4-5ec5-46d6-850f-ca0619ad7dd1';
-
 const List = () => {
+
+    const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
+        apiUrl = 'https://api.thedogapi.com/v1/breeds',
+        apiImageUrl = 'https://api.thedogapi.com/v1/images/search',
+        apiKey = 'dda2eda4-5ec5-46d6-850f-ca0619ad7dd1';
+
 
     const [loading, setLoading] = useState(true);
     const [breeds, setBreeds] = useState([]);
@@ -18,9 +19,7 @@ const List = () => {
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState([]);
 
-
     let dogs = [];
-
 
     const callAPI = async () => {
         try {
@@ -30,7 +29,7 @@ const List = () => {
             */
             const results = await axios.get(proxyUrl + apiUrl, {
                 params: {
-                    limit: 10,
+                    limit: null,
                     apiKey: apiKey,
                 }
             });
@@ -62,7 +61,7 @@ const List = () => {
             /*
                 For every dog breed returned from API create dog object and push to dogs array
             */
-            results.data.map((result) => {
+            results.data.forEach((result) => {
 
                 start(result.id).then((images) => {
                     const dog = Object.create(null);
@@ -74,12 +73,15 @@ const List = () => {
                     dog.name = result.name
                     dog.id = result.id
                     dogs.push(dog);
-                });
-
+                    return;
+                })
             });
 
+            setTimeout(() => {
+                setFilteredResults(dogs)
+            }, 5000);
             setLoading(false);
-
+            return results;
         } catch (error) {
 
             setError(error);
@@ -88,45 +90,44 @@ const List = () => {
         }
     }
 
-    callAPI();
 
     useEffect(() => {
-        setBreeds(dogs);
-        setFilteredResults(dogs);
+        callAPI();
     },[]);
 
-    useEffect(() => {
-        if (query !== "") {
-            setFilteredResults(
-                breeds.filter(breed =>
-                    breed.name.toLowerCase().includes(query.toLowerCase())
-                )
-            );
-        } else {
-            setFilteredResults(breeds);
-        }
-    }, [query]);
+    // useEffect(() => {
+    //     setFilteredResults(breeds)
+    //     console.log('filter', filteredResults)
+    //     if (query !== "") {
+    //         setFilteredResults(
+    //             breeds.filter(breed =>
+    //                 breed.name.toLowerCase().includes(query.toLowerCase())
+    //             )
+    //         );
+    //     } else {
+    //         setFilteredResults(breeds)
+    //     }
+    // }, [query]);
 
-    useEffect(() => {
-        if (query !== "") {
-            setPageTitle(filteredResults.length + ' dogs')
-        } else {
-            setPageTitle('All dogs')
-        }
-    }, [filteredResults]);
+    // useEffect(() => {
+        // if (query !== "") {
+        //     setPageTitle(filteredResults.length + ' dogs')
+        // } else {
+        //     setPageTitle('All dogs')
+        // }
+    // }, [filteredResults]);
 
 
-    const List = () => {
+    const ListItems = () => {
         return (
+            filteredResults.length > 0 &&
             filteredResults
-                .map(breed => {
-                    return (
-                        <ListItem
-                            key={breed.id}
-                            breed={breed}
-                        />
-                    )
-                })
+                .map((breed) => (
+                    <ListItem
+                        key={breed.id}
+                        breed={breed}
+                    />
+                ))
         )
     }
 
@@ -143,7 +144,7 @@ const List = () => {
             </div>
             {!loading ? (
                 <ul className={"flex flex-wrap py-8 px-4"}>
-                    <List />
+                    <ListItems />
                 </ul>
             ) : (
                 <Loader />
