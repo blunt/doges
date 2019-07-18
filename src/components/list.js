@@ -21,26 +21,23 @@ const List = () => {
 
     let dogs = [];
 
-    const callAPI = async () => {
-        try {
+    const callAPI = () => {
 
             /*
                 Get dog breeds from API
             */
-            const results = await axios.get(proxyUrl + apiUrl, {
+            axios.get(proxyUrl + apiUrl, {
                 params: {
                     limit: null,
                     apiKey: apiKey,
                 }
-            });
-
-            /*
+            }).then((results) => {
+                /*
                 Get dog images based on breed_id
             */
-            const start = async (breed_id) => {
-                try {
+                const start = (breed_id) => {
 
-                    const images = await axios.get(proxyUrl + apiImageUrl, {
+                    const images = axios.get(proxyUrl + apiImageUrl, {
                         params: {
                             limit: null,
                             apiKey: apiKey,
@@ -50,50 +47,39 @@ const List = () => {
 
                     return images;
 
-                } catch (error) {
 
-                    setLoading(false);
-                    setError(error);
 
                 }
-            }
 
-            /*
-                For every dog breed returned from API create dog object and push to dogs array
-            */
-            results.data.forEach((result) => {
-
-                start(result.id).then((images) => {
-                    const dog = Object.create(null);
-                    if (images.data.length > 0) {
-                        dog.image = images.data[0].url
-                    } else {
-                        dog.image = ""
-                    }
-                    dog.name = result.name
-                    dog.id = result.id
-                    dogs.push(dog);
-                    return;
-                })
+                /*
+                    For every dog breed returned from API create dog object and push to dogs array
+                */
+                results.data.map((result) => {
+                    start(result.id).then((images) => {
+                        const dog = Object.create(null);
+                        if (images.data.length > 0) {
+                            dog.image = images.data[0].url
+                        } else {
+                            dog.image = ""
+                        }
+                        dog.name = result.name
+                        dog.id = result.id
+                        dogs.push(dog);
+                        return;
+                    })
+                });
+                setFilteredResults(dogs);
+                setLoading(false);
             });
 
-            setTimeout(() => {
-                setFilteredResults(dogs)
-            }, 5000);
-            setLoading(false);
-            return results;
-        } catch (error) {
 
-            setError(error);
-            setLoading(false);
-
-        }
     }
 
 
     useEffect(() => {
         callAPI();
     },[]);
+
 
     // useEffect(() => {
     //     setFilteredResults(breeds)
@@ -120,7 +106,6 @@ const List = () => {
 
     const ListItems = () => {
         return (
-            filteredResults.length > 0 &&
             filteredResults
                 .map((breed) => (
                     <ListItem
@@ -142,7 +127,7 @@ const List = () => {
                     queryChange={setQuery}
                 />
             </div>
-            {!loading ? (
+            {!loading && filteredResults.length > 0 ? (
                 <ul className={"flex flex-wrap py-8 px-4"}>
                     <ListItems />
                 </ul>
