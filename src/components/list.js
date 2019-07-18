@@ -66,10 +66,11 @@ const List = () => {
                         dog.id = result.id
                         dogs.push(dog);
                         return;
-                    })
+                    }).then(() =>  {
+                        setFilteredResults(dogs);
+                        setLoading(false);    
+                    });
                 });
-                setFilteredResults(dogs);
-                setLoading(false);
             });
 
 
