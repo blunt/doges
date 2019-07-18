@@ -19,66 +19,37 @@ const List = () => {
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState([]);
 
-    let dogs = [];
 
-    const callAPI = () => {
+    const workflow = async () => {
+      const allDogs = await axios.get(proxyUrl + apiUrl, {
+          params: {
+              limit: null,
+              apiKey: apiKey,
+          }
+      });
+      console.log('allDogs', allDogs.data);
 
-            /*
-                Get dog breeds from API
-            */
-            axios.get(proxyUrl + apiUrl, {
-                params: {
-                    limit: null,
-                    apiKey: apiKey,
-                }
-            }).then((results) => {
-                /*
-                Get dog images based on breed_id
-            */
-                const start = (breed_id) => {
+      const allDogsIds = allDogs.data.map(d => { return d.id });
+      console.log('allDogsIds', allDogsIds)
 
-                    const images = axios.get(proxyUrl + apiImageUrl, {
-                        params: {
-                            limit: null,
-                            apiKey: apiKey,
-                            breed_id: breed_id,
-                        }
-                    });
-
-                    return images;
+      let dogs = allDogs.data.map(d => {
+          return {
+              id: d.id,
+              name: d.name,
+          }
+      })
+      console.log('dogs', dogs)
 
 
+    console.log('dogs', dogs)
+    setFilteredResults(dogs);
+    setLoading(false);
+    };
 
-                }
-
-                /*
-                    For every dog breed returned from API create dog object and push to dogs array
-                */
-                results.data.map((result) => {
-                    start(result.id).then((images) => {
-                        const dog = Object.create(null);
-                        if (images.data.length > 0) {
-                            dog.image = images.data[0].url
-                        } else {
-                            dog.image = ""
-                        }
-                        dog.name = result.name
-                        dog.id = result.id
-                        dogs.push(dog);
-                        return;
-                    }).then(() =>  {
-                        setFilteredResults(dogs);
-                        setLoading(false);    
-                    });
-                });
-            });
-
-
-    }
 
 
     useEffect(() => {
-        callAPI();
+        workflow();
     },[]);
 
 
