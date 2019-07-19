@@ -21,15 +21,19 @@ const ListItem = (props) => {
 
         if (dogImage.data.length > 0) {
             url = dogImage.data[0].url
+            localStorage.setItem('dogImage' + props.breed.id, url);
         }
 
         setImage(url);
     }
 
     useEffect(() => {
-        getDogImage();
+        if (localStorage.getItem('dogImage' + props.breed.id) === null) {
+            getDogImage();
+        } else {
+            setImage(localStorage.getItem('dogImage' + props.breed.id));
+        }
     },[]);
-
 
     return (
         <li className={"w-1/4 px-4 mb-8"}>

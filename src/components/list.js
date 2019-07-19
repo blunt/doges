@@ -54,7 +54,15 @@ const List = () => {
 
 
     useEffect(() => {
-
+        if (query !== "") {
+            setFilteredResults(
+                allDogs.filter(dog =>
+                    dog.name.toLowerCase().includes(query.toLowerCase())
+                )
+            );
+        } else {
+            setFilteredResults(allDogs);
+        }
     }, [query]);
 
     useEffect(() => {
@@ -73,6 +81,7 @@ const List = () => {
                     <ListItem
                         key={dog.id}
                         breed={dog}
+                        query={query}
                     />
                 ))
         )

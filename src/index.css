@@ -7610,8 +7610,8 @@ video {
 }
 
 .fade {
-  -webkit-animation: fade .3s ease-in-out;
-          animation: fade .3s ease-in-out;
+  -webkit-animation: fade .1s ease-in-out;
+          animation: fade .1s ease-in-out;
 }
 
 @-webkit-keyframes fade {
