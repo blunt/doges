@@ -51,6 +51,7 @@ const List = () => {
     },[]);
 
 
+    // TODO: make dog search work better and with more fields
     useEffect(() => {
         if (query !== "") {
             setFilteredResults(

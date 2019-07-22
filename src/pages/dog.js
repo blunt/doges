@@ -57,10 +57,18 @@ const Dog = ({match}) => {
                     </PageHeader>
                     <section className={"py-8 px-8"}>
                         <div className={"pl-2 w-3/4 ml-auto"}>
+                            {/*TODO: remove image if dog image isn't there*/}
                             <div className={"overflow-hidden rounded-lg mb-2 h-48 dog-image relative bg-gray-200"}>
-                                <img className={"object-cover object-top fade"} src={image} alt={"Picture of a " + dog.name} />
+                                {image !== "" &&
+                                    <img
+                                        className={"object-cover object-top fade"}
+                                        src={image}
+                                        alt={"Picture of a " + dog.name}/>
+                                }
                             </div>
                             <h1>{dog.life_span}</h1>
+                            <h1>height: {dog.height.imperial} inches</h1>
+                            <h1>{dog.temperament}</h1>
                         </div>
                     </section>
                 </div>
