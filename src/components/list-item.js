@@ -23,7 +23,7 @@ const ListItem = (props) => {
                 <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200"}>
                     {image !== "" &&
                         <img
-                            className={"h-full w-full object-cover fade"}
+                            className={"h-full w-full object-cover object-top fade"}
                             src={image}
                             alt={"Picture of a " + props.breed.name}
                         />

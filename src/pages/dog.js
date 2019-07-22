@@ -11,6 +11,7 @@ const Dog = ({match}) => {
     const [dog, setDog] = useState({});
     const [image, setImage] = useState('');
 
+    // TODO some dogs have a dash in their name resulting in 404 when replaced with space
     const breed_name = match.params.id.toUpperCase().replace(/-/g, " ")
 
     const getDog = async () => {
@@ -57,7 +58,7 @@ const Dog = ({match}) => {
                     <section className={"py-8 px-8"}>
                         <div className={"pl-2 w-3/4 ml-auto"}>
                             <div className={"overflow-hidden rounded-lg mb-2 h-48 dog-image relative bg-gray-200"}>
-                                <img className={"object-cover fade"} src={image} alt={"Picture of a " + dog.name} />
+                                <img className={"object-cover object-top fade"} src={image} alt={"Picture of a " + dog.name} />
                             </div>
                             <h1>{dog.life_span}</h1>
                         </div>
