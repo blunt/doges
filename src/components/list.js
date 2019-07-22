@@ -1,14 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import {apiUrl, apiKey } from '../App';
 import ListItem from "./list-item";
 import Loader from "./loader";
 import Search from "./search";
+import PageHeader from "./page-header";
 
 const List = () => {
-
-    const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
-          apiUrl = proxyUrl + 'https://api.thedogapi.com/v1/breeds',
-          apiKey = 'dda2eda4-5ec5-46d6-850f-ca0619ad7dd1';
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -19,7 +17,7 @@ const List = () => {
 
     let dogs;
 
-    const workflow = async () => {
+    const getDogs = async () => {
         try {
             const allDogs = await axios.get(apiUrl, {
                 params: {
@@ -49,7 +47,7 @@ const List = () => {
 
 
     useEffect(() => {
-        workflow();
+        getDogs();
     },[]);
 
 
@@ -88,16 +86,13 @@ const List = () => {
     }
 
     return (
-        <div className={"w-4/5 relative"}>
-            <div className={"flex items-center sticky top-0 left-0 right-0 px-8 py-4 bg-white z-10"}>
-                <h1 className={"text-2xl font-bold"}>
-                    {pageTitle}
-                </h1>
+        <div className={"container"}>
+            <PageHeader pageTitle={pageTitle}>
                 <Search
                     query={query}
                     queryChange={setQuery}
                 />
-            </div>
+            </PageHeader>
             {!loading ? (
                 <ul className={"flex flex-wrap py-8 px-4"}>
                     <ListItems />
