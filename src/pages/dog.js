@@ -37,8 +37,9 @@ const Dog = ({match}) => {
 
     useEffect(() => {
         if (localStorage.getItem('dogImage' + dog.id) === null) {
-            const url = getDogImage(dog.id);
-            setImage(url);
+            const getImage = getDogImage(dog.id).then((url) => {
+                setImage(url);
+            });
         } else {
             setImage(localStorage.getItem('dogImage' + dog.id));
         }
@@ -54,8 +55,11 @@ const Dog = ({match}) => {
                         </div>
                     </PageHeader>
                     <section className={"py-8 px-8"}>
-                        <div className={"overflow-hidden rounded-lg mb-2 h-48 dog-image relative bg-gray-200"}>
-                            <img className={"object-cover fade"} src={image} alt={"Picture of a " + dog.name} />
+                        <div className={"pl-2 w-3/4 ml-auto"}>
+                            <div className={"overflow-hidden rounded-lg mb-2 h-48 dog-image relative bg-gray-200"}>
+                                <img className={"object-cover fade"} src={image} alt={"Picture of a " + dog.name} />
+                            </div>
+                            <h1>{dog.life_span}</h1>
                         </div>
                     </section>
                 </div>

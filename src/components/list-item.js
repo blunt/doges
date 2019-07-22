@@ -9,8 +9,9 @@ const ListItem = (props) => {
 
     useEffect(() => {
         if (localStorage.getItem('dogImage' + props.breed.id) === null) {
-            const url = getDogImage(props.breed.id);
-            setImage(url);
+            const getImage = getDogImage(props.breed.id).then((imageUrl) => {
+                setImage(imageUrl);
+            });
         } else {
             setImage(localStorage.getItem('dogImage' + props.breed.id));
         }
@@ -21,11 +22,11 @@ const ListItem = (props) => {
             <Link to={'/' + url}>
                 <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200"}>
                     {image !== "" &&
-                    <img
-                        className={"h-full w-full object-cover fade"}
-                        src={image}
-                        alt={"Picture of a " + props.breed.name}
-                    />
+                        <img
+                            className={"h-full w-full object-cover fade"}
+                            src={image}
+                            alt={"Picture of a " + props.breed.name}
+                        />
                     }
                 </div>
                 <h3 className={"font-bold"}>{props.breed.name}</h3>
