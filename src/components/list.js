@@ -45,7 +45,7 @@ const List = () => {
 
 
     useEffect(() => {
-        document.title = "Dogs";
+        document.title = "Doges";
         getDogs();
     }, []);
 

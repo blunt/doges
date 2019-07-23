@@ -36,7 +36,7 @@ const Dog = ({match}) => {
     });
 
     useEffect(() => {
-        document.title = dog.name + " – Dogs";
+        document.title = dog.name + " – Doges";
         if (localStorage.getItem('dogImage' + dog.id) === null) {
             getDogImage(dog.id).then((url) => {
                 setImage(url);
