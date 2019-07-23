@@ -6,7 +6,7 @@ install:
   - yarn install
 script:
   # run generator
-  - CI=false yarn run build
+  - CI=false yarn build
 deploy:
   provider: pages
   skip_cleanup: true
