@@ -9,7 +9,6 @@ import PageHeader from "./page-header";
 const List = () => {
 
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [pageTitle, setPageTitle] = useState("All dogs");
     const [query, setQuery] = useState("");
     const [allDogs, setAllDogs] = useState([]);
@@ -37,7 +36,6 @@ const List = () => {
             setFilteredResults(dogs);
             setLoading(false);
         } catch {
-            setError(true);
             setLoading(false);
 
         }
@@ -47,8 +45,9 @@ const List = () => {
 
 
     useEffect(() => {
+        document.title = "Dogs";
         getDogs();
-    },[]);
+    }, []);
 
 
     // TODO: make dog search work better and with more fields
@@ -62,7 +61,7 @@ const List = () => {
         } else {
             setFilteredResults(allDogs);
         }
-    }, [query]);
+    }, [allDogs, query]);
 
     useEffect(() => {
         if (query !== "") {
@@ -70,7 +69,7 @@ const List = () => {
         } else {
             setPageTitle('All dogs')
         }
-    }, [filteredResults]);
+    }, [query, filteredResults]);
 
 
     const ListItems = () => {

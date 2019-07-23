@@ -5,11 +5,24 @@
 @tailwind utilities;
 
 .container {
-    @apply w-4/5 relative ml-auto;
+    @apply w-full relative;
+    max-width: inherit;
+}
+
+@screen lg {
+    .container {
+        @apply w-11/12 ml-auto;
+    }
 }
 
 h1, .header a  {
-    @apply text-2xl font-bold;
+    @apply text-lg font-bold;
+}
+
+@screen md {
+    h1, .header a  {
+        @apply text-2xl;
+    }
 }
 
 .header a {
@@ -17,12 +30,12 @@ h1, .header a  {
     transition: opacity .1s ease-in;
 }
 
-.header a:hover {
-    @apply opacity-100;
+a {
+    transition: all .1s ease-in;
 }
 
-.header {
-    @apply flex items-center sticky top-0 left-0 right-0 px-8 py-4 bg-white z-20;
+.header a:hover {
+    @apply opacity-100;
 }
 
 .dog-image {

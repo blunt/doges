@@ -7578,14 +7578,27 @@ video {
 }
 
 .container {
-  width: 80%;
+  width: 100%;
   position: relative;
-  margin-left: auto;
+  max-width: inherit;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    width: 91.666667%;
+    margin-left: auto;
+  }
 }
 
 h1, .header a  {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  h1, .header a  {
+    font-size: 1.5rem;
+  }
 }
 
 .header a {
@@ -7594,30 +7607,17 @@ h1, .header a  {
   transition: opacity .1s ease-in;
 }
 
+a {
+  -webkit-transition: all .1s ease-in;
+  transition: all .1s ease-in;
+}
+
 .header a:hover {
   opacity: 1;
 }
 
-.header {
-  display: -webkit-box;
-  display: flex;
-  -webkit-box-align: center;
-          align-items: center;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  background-color: #fff;
-  z-index: 20;
-}
-
 .dog-image {
-  height: 32rem;
+  height: 27rem;
 }
 
 .spinner {

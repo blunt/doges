@@ -9,16 +9,16 @@ const ListItem = (props) => {
 
     useEffect(() => {
         if (localStorage.getItem('dogImage' + props.breed.id) === null) {
-            const getImage = getDogImage(props.breed.id).then((imageUrl) => {
+            getDogImage(props.breed.id).then((imageUrl) => {
                 setImage(imageUrl);
             });
         } else {
             setImage(localStorage.getItem('dogImage' + props.breed.id));
         }
-    },[]);
+    },[props.breed.id]);
 
     return (
-        <li className={"w-1/4 px-4 mb-8"}>
+        <li className={"md:w-1/4 w-1/2 md:px-4 px-2 md:mb-8 mb-4"}>
             <Link to={'/' + url}>
                 <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200 border-4 border-gray-200"}>
                     {image !== "" &&

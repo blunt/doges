@@ -8,7 +8,6 @@ import DetailItem from "../components/detail-item";
 
 const Dog = ({match}) => {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const [dog, setDog] = useState({});
     const [image, setImage] = useState('');
 
@@ -27,7 +26,6 @@ const Dog = ({match}) => {
             setDog(dog.data[0]);
             setLoading(false);
         } catch {
-            setError(true);
             setLoading(false);
         }
 
@@ -35,11 +33,12 @@ const Dog = ({match}) => {
 
     useEffect(() => {
         getDog();
-    },[]);
+    });
 
     useEffect(() => {
+        document.title = dog.name + " – Dogs";
         if (localStorage.getItem('dogImage' + dog.id) === null) {
-            const getImage = getDogImage(dog.id).then((url) => {
+            getDogImage(dog.id).then((url) => {
                 setImage(url);
             });
         } else {
@@ -52,10 +51,10 @@ const Dog = ({match}) => {
             {!loading ? (
                 <div>
                     <PageHeader pageTitle={dog.name} />
-                    <section className={"pt-2 pb-4 px-8"}>
-                        <div className={"pl-2"}>
+                    <section className={"pt-2 pb-4 md:px-8 px-6"}>
+                        <div className={"flex flex-wrap"}>
                             {/*TODO: remove image if dog image isn't there*/}
-                            <div className={"overflow-hidden rounded-lg mb-8 dog-image relative bg-gray-200 border-4 border-gray-200"}>
+                            <div className={"lg:w-1/2 overflow-hidden rounded-lg mb-8 dog-image relative bg-gray-200 border-4 border-gray-200"}>
                                 {image !== "" &&
                                     <img
                                         className={"object-cover object-top fade w-full h-full"}
@@ -63,7 +62,7 @@ const Dog = ({match}) => {
                                         alt={"Picture of a " + dog.name}/>
                                 }
                             </div>
-                            <section className={"pb-16"}>
+                            <section className={"lg:w-1/2 md:pb-12 lg:pl-8 pb-6"}>
                                 {dog.bred_for &&
                                     <DetailItem
                                         label="Bred for"
@@ -77,10 +76,10 @@ const Dog = ({match}) => {
                                     />
                                 }
                                 {dog.origin &&
-                                <DetailItem
-                                    label="Origin"
-                                    detail={dog.origin}
-                                />
+                                    <DetailItem
+                                        label="Origin"
+                                        detail={dog.origin}
+                                    />
                                 }
                                 {dog.life_span &&
                                     <DetailItem
