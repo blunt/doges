@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/doges/static/css/main.3a0f22ad.chunk.css",
-    "main.js": "/doges/static/js/main.ae0a563d.chunk.js",
-    "main.js.map": "/doges/static/js/main.ae0a563d.chunk.js.map",
+    "main.js": "/doges/static/js/main.a26a0641.chunk.js",
+    "main.js.map": "/doges/static/js/main.a26a0641.chunk.js.map",
     "runtime~main.js": "/doges/static/js/runtime~main.16dcfd3d.js",
     "runtime~main.js.map": "/doges/static/js/runtime~main.16dcfd3d.js.map",
     "static/js/2.6d6f507a.chunk.js": "/doges/static/js/2.6d6f507a.chunk.js",
     "static/js/2.6d6f507a.chunk.js.map": "/doges/static/js/2.6d6f507a.chunk.js.map",
     "index.html": "/doges/index.html",
-    "precache-manifest.c3a1122d25b0eada1c925d92d30b60d5.js": "/doges/precache-manifest.c3a1122d25b0eada1c925d92d30b60d5.js",
+    "precache-manifest.f44931659e2da97e22398a7c33b94070.js": "/doges/precache-manifest.f44931659e2da97e22398a7c33b94070.js",
     "service-worker.js": "/doges/service-worker.js",
     "static/css/main.3a0f22ad.chunk.css.map": "/doges/static/css/main.3a0f22ad.chunk.css.map"
   }
