@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - "node"
+install:
+  # install eleventy and any dependencies inside ./package.json
+  - npm install
+script:
+  # run generator
+  - npm run build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  local_dir: build
+  target_branch: master
+  on:
+    branch: dev
