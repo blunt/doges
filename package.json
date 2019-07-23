@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "homepage": "/doges",
+  "homepage": "https://blunt.af/doges",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

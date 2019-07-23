@@ -12,10 +12,10 @@ export const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
 
 function App() {
     return (
-        <Router>
+        <Router basename={'/doges'}>
             <Header/>
-            <Route exact path="/" component={Home} />
-            <Route path="/:id" component={Dog} />
+            <Route exact path={`${process.env.PUBLIC_URL}/`} component={Home} />
+            <Route path={`${process.env.PUBLIC_URL}/:id`} component={Dog} />
         </Router>
     );
 }
