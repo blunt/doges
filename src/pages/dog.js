@@ -4,6 +4,7 @@ import {apiKey, dogEndpoint} from '../App';
 import Loader from "../components/loader";
 import PageHeader from "../components/page-header";
 import {getDogImage} from "../services/DogImage";
+import DetailItem from "../components/detail-item";
 
 const Dog = ({match}) => {
     const [loading, setLoading] = useState(true);
@@ -50,25 +51,62 @@ const Dog = ({match}) => {
         <div className={"container"}>
             {!loading ? (
                 <div>
-                    <PageHeader pageTitle={'All dogs'}>
-                        <div className={"pl-2 w-3/4 ml-auto"}>
-                            <h1>{dog.name}</h1>
-                        </div>
-                    </PageHeader>
-                    <section className={"py-8 px-8"}>
-                        <div className={"pl-2 w-3/4 ml-auto"}>
+                    <PageHeader pageTitle={dog.name} />
+                    <section className={"pt-2 pb-4 px-8"}>
+                        <div className={"pl-2"}>
                             {/*TODO: remove image if dog image isn't there*/}
-                            <div className={"overflow-hidden rounded-lg mb-2 h-48 dog-image relative bg-gray-200"}>
+                            <div className={"overflow-hidden rounded-lg mb-8 dog-image relative bg-gray-200 border-4 border-gray-200"}>
                                 {image !== "" &&
                                     <img
-                                        className={"object-cover object-top fade"}
+                                        className={"object-cover object-top fade w-full h-full"}
                                         src={image}
                                         alt={"Picture of a " + dog.name}/>
                                 }
                             </div>
-                            <h1>{dog.life_span}</h1>
-                            <h1>height: {dog.height.imperial} inches</h1>
-                            <h1>{dog.temperament}</h1>
+                            <section className={"pb-16"}>
+                                {dog.bred_for &&
+                                    <DetailItem
+                                        label="Bred for"
+                                        detail={dog.bred_for}
+                                    />
+                                }
+                                {dog.breed_group &&
+                                    <DetailItem
+                                        label="Breed group"
+                                        detail={dog.breed_group}
+                                    />
+                                }
+                                {dog.origin &&
+                                <DetailItem
+                                    label="Origin"
+                                    detail={dog.origin}
+                                />
+                                }
+                                {dog.life_span &&
+                                    <DetailItem
+                                        label="Life span"
+                                        detail={dog.life_span}
+                                    />
+                                }
+                                {dog.temperament &&
+                                    <DetailItem
+                                        label="Temperament"
+                                        detail={dog.temperament}
+                                    />
+                                }
+                                {dog.height &&
+                                    <DetailItem
+                                        label="Height"
+                                        detail={dog.height.imperial + " inches"}
+                                    />
+                                }
+                                {dog.weight &&
+                                    <DetailItem
+                                        label="Weight"
+                                        detail={dog.weight.imperial + " pounds"}
+                                    />
+                                }
+                            </section>
                         </div>
                     </section>
                 </div>

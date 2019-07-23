@@ -95,7 +95,7 @@ const List = () => {
                 />
             </PageHeader>
             {!loading ? (
-                <ul className={"flex flex-wrap py-8 px-4"}>
+                <ul className={"flex flex-wrap pt-2 pb-4 px-4"}>
                     <ListItems />
                 </ul>
             ) : (

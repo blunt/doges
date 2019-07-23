@@ -20,7 +20,7 @@ const ListItem = (props) => {
     return (
         <li className={"w-1/4 px-4 mb-8"}>
             <Link to={'/' + url}>
-                <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200"}>
+                <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200 border-4 border-gray-200"}>
                     {image !== "" &&
                         <img
                             className={"h-full w-full object-cover object-top fade"}

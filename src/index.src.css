@@ -22,15 +22,11 @@ h1, .header a  {
 }
 
 .header {
-    @apply flex items-center sticky top-0 left-0 right-0 px-8 py-4 bg-white z-10
+    @apply flex items-center sticky top-0 left-0 right-0 px-8 py-4 bg-white z-20;
 }
 
 .dog-image {
-    padding-bottom: 56.25%;
-}
-
-.dog-image img {
-    @apply absolute inset-0 w-full h-full z-10;
+    height: 27rem;
 }
 
 .spinner {
