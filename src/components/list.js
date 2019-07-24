@@ -20,7 +20,7 @@ const List = () => {
         try {
             const allDogs = await axios.get(apiUrl, {
                 params: {
-                limit: null,
+                limit: 12,
                 apiKey: apiKey,
                 }
             });
