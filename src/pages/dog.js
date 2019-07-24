@@ -54,7 +54,7 @@ const Dog = ({match}) => {
                     <section className={"pt-2 pb-4 md:px-8 px-6"}>
                         <div className={"flex flex-wrap"}>
                             {/*TODO: remove image if dog image isn't there*/}
-                            <div className={"lg:w-1/2 overflow-hidden rounded-lg mb-8 dog-image relative bg-gray-200 border-4 border-gray-200"}>
+                            <div className={"lg:w-1/2 overflow-hidden rounded-lg mb-8 dog-image relative bg-gray-200 border-2 border-black"}>
                                 {image !== "" &&
                                     <img
                                         className={"object-cover object-top fade w-full h-full"}
