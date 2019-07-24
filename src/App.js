@@ -4,7 +4,7 @@ import Dog from "./pages/dog";
 import Header from "./components/header";
 import {HashRouter as Router, Route } from "react-router-dom";
 
-export const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
+export const proxyUrl = '',
              apiUrl = proxyUrl + 'https://api.thedogapi.com/v1/breeds',
              apiImageUrl = proxyUrl + 'https://api.thedogapi.com/v1/images/search',
              dogEndpoint = 'https://api.thedogapi.com/v1/breeds/search',
