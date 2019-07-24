@@ -2,7 +2,7 @@ import React from 'react';
 import Home from "./pages/home";
 import Dog from "./pages/dog";
 import Header from "./components/header";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {HashRouter as Router, Route } from "react-router-dom";
 
 export const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
              apiUrl = proxyUrl + 'https://api.thedogapi.com/v1/breeds',
@@ -12,10 +12,10 @@ export const proxyUrl = 'https://cors-anywhere.herokuapp.com/',
 
 function App() {
     return (
-        <Router basename={process.env.PUBLIC_URL}>
+        <Router basename={'/'}>
             <Header/>
-            <Route exact path={process.env.PUBLIC_URL + '/'} component={Home} />
-            <Route path={process.env.PUBLIC_URL + '/:id'} component={Dog} />
+            <Route exact path={'/'} component={Home} />
+            <Route path={'/:id'} component={Dog} />
         </Router>
     );
 }
