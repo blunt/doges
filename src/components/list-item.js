@@ -19,7 +19,7 @@ const ListItem = (props) => {
 
     return (
         <li className={"md:w-1/4 w-1/2 md:px-4 px-2 md:mb-8 mb-4"}>
-            <Link to={`${process.env.PUBLIC_URL}/${url}`}>
+            <Link to={"/" + url}>
                 <div className={"overflow-hidden rounded-lg mb-2 h-48 bg-gray-200 border-4 border-gray-200"}>
                     {image !== "" &&
                         <img
